@@ -1,6 +1,17 @@
 ISCA 2018
 
 MICRO 2018
+iDO: Compiler-Directed Failure Atomicity for Nonvolatile Memory.
+Scalable Distributed Last-Level TLBs Using Low-Latency Interconnects.
+Duplicon Cache: Mitigating Off-Chip Memory Bank and Bank Group Conflicts Via Data Duplication.
+Reducing DRAM Latency via Charge-Level-Aware Look-Ahead Partial Restoration. 
+CABLE: A CAche-Based Link Encoder for Bandwidth-Starved Manycores. 
+Persistence Parallelism Optimization: A Holistic Approach from Memory Bus to RDMA Network.
+PiCL: A Software-Transparent, Persistent Cache Log for Nonvolatile Main Memory.
+Efficient Hardware-Assisted Logging with Asynchronous and Direct-Update for Persistent Memory. 
+HAMELEON: A Dynamically Reconfigurable Heterogeneous Memory System.
+Compresso: Pragmatic Main Memory Compression. 
+Farewell My Shared LLC! A Case for Private Die-Stacked DRAM Caches for Servers.
 
 ASPLOS 2019
 
