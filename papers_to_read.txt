@@ -1,7 +1,3 @@
-ISCA 2018
-
-MICRO 2018
-
 iDO: Compiler-Directed Failure Atomicity for Nonvolatile Memory.
 	Eliminating the need to log every persistent store
 
@@ -12,7 +8,8 @@ the RDMA network.
 Efficient Hardware-Assisted Logging with Asynchronous and Direct-Update for Persistent Memory. 
 	redo-based logging (ReDU), which performs direct and asynchronous in-place data update to NVM.
 
-ASPLOS 2019
+Fine-Grain Checkpointing with In-Cache-Line Logging.
+	quickly recoverable data structure in NVM after a system failure,enables recovery of earlier state without requiring cacheline flushes in the normal case.
 
-HPCA 2019
+OneFile: A Wait-free Persistent Transactional Memory
 
