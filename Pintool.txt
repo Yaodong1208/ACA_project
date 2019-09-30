@@ -1,0 +1,8 @@
+Chinese version user guide
+
+http://brieflyx.me/2017/binary-analysis/intel-pin-intro/
+
+
+pin 3.4 user guide
+
+https://software.intel.com/sites/landingpage/pintool/docs/97438/Pin/html/
