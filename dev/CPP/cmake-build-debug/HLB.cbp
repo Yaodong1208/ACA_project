@@ -83,6 +83,12 @@
 		<Unit filename="/Users/anlanyu/ACA_project/dev/HLB/HLB.h">
 			<Option target="HLB"/>
 		</Unit>
+		<Unit filename="/Users/anlanyu/ACA_project/dev/HLB/hlb_api.h">
+			<Option target="HLB"/>
+		</Unit>
+		<Unit filename="/Users/anlanyu/ACA_project/dev/HLB/inst_simulate.h">
+			<Option target="HLB"/>
+		</Unit>
 		<Unit filename="/Users/anlanyu/ACA_project/dev/HLB/main.cpp">
 			<Option target="HLB"/>
 		</Unit>
