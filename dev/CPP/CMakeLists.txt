@@ -3,4 +3,4 @@ project(HLB)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(HLB main.cpp HLB.h hlb_api.h inst_simulate.h)
+add_executable(HLB main.cpp hlb_api.h)

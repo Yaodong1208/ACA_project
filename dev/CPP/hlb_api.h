@@ -1,7 +1,7 @@
 //
 // Created by Anlan Yu on 11/23/19.
 //
-#include "inst_simulate.h"
+#include "../HLB/inst_simulate.h"
 #ifndef HLB_HLB_API_H
 #define HLB_HLB_API_H
 
@@ -54,7 +54,7 @@ private:
 
 };
 template<class T1,class T2>
-void HLB<T1,T2>::rehash(size_t indicator) {
+void HLB<T1,T2>::rehash_hlb(size_t indicator) {
     //if extend is called, indicate it's extendable now
     //if shrink is called, indicate it's shrinkable now
     //first step is flush all used elements from hlb to vector by use hash_erase_inst
@@ -115,7 +115,7 @@ void HLB<T1,T2>::rehash(size_t indicator) {
 }
 
 template<class T1,class T2>
-void HLB<T1,T2>::clear() {
+void HLB<T1,T2>::clear_hlb() {
     //set the ROW_END to 1
     size_t begin = 0;
     size_t end = -1;
@@ -148,14 +148,14 @@ void HLB<T1,T2>::hash_insert(T1 k, T2 v, int rehash_count){
         if(reg_v != 0) {
             //in this case hash_table is extendable
             //extend the hash_table to double, then insert the kv pair want to insert
-            rehash(3);
+            rehash_hlb(3);
             hash_insert(k,v,rehash_count);
         }else{
             if(rehash_count < REHASH_MAX && reg_v < LOAD_FACTOR) {
                 //in this case hash_table is not extendable && the occupied rate is not high, we need to change the hash function
                 //in such case, we still can rehash because rehash_count by now is still smaller then REHASH_MAX
                 //only change hash_function parameter s, not changing size
-                rehash(0);
+                rehash_hlb(0);
                 hash_insert(k,v,rehash_count+1);
 
             }else {
@@ -215,7 +215,7 @@ void HLB<T1,T2>::hash_erase(T1 key){
         hash_iterator_inst(reg);
         if(reg){
             //means it is shrinkable
-            rehash(4);
+            rehash_hlb(4);
         }
 
     }

@@ -1,11 +1,11 @@
 #include <iostream>
-#include "HLB.h"
+#include "hlb_api.h"
 #include <vector>
 using namespace std;
 int main() {
 //    std::cout << "Hello, World!" << std::endl;
     HLB<uint32_t, uint32_t> hlb;
-    hlb.clear();
+    hlb.clear_hlb();
     vector<uint64_t> insert_kv;
     for(int i = 0;i<10000;i++){
         int rate = rand(); //use this rate to determine whether insert erase or lookup, rules are shown below
