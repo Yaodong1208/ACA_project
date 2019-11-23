@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/anlanyu/ACA_project/dev/HLB/HLB.h
+iostream
+-
+unordered_map
+-
+functional
+-
+vector
+-
+
+/Users/anlanyu/ACA_project/dev/HLB/main.cpp
+iostream
+-
+HLB.h
+/Users/anlanyu/ACA_project/dev/HLB/HLB.h
+vector
+-
+
