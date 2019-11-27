@@ -3,4 +3,4 @@ project(HLB)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(HLB main.cpp hlb_api.h)
+add_executable(HLB main.cpp hlb_api.h tests/test001.h tests/test002.h)
