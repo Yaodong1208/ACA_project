@@ -55,20 +55,18 @@ private:
 };
 template<class T1,class T2>
 void HLB<T1,T2>::rehash_hlb(size_t indicator) {
-    //if extend is called, indicate it's extendable now
-    //if shrink is called, indicate it's shrinkable now
+    //if extend is called, indicate it's extendable now indicator == 3
+    //if shrink is called, indicate it's shrinkable now indicator == 4
     //first step is flush all used elements from hlb to vector by use hash_erase_inst
     //double row_end in hlb by using hash_iterator_inst
     //change hash function by changing shift, if extend then shift -- shrink then shift ++
     //for all elements we hash_insert them.
     size_t reg_key = 0;
-    size_t reg;
     size_t rehash = 10;
     hash_iterator_inst(reg_key);
     if(reg_key == NOVAL) {
         //nothing in hlb for now
-        reg = 3;
-        hash_iterator_inst(reg);
+        //no need to do rehash
     }else {
         //we need to do everything mentioned above
         size_t begin = reg_key;
@@ -76,6 +74,10 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator) {
         hash_iterator_inst(end);
         size_t iter = begin;
         //flush
+        //clear all victims and insert a new set of data
+        victim_vector.clear();
+        int a = victim_vector.size();
+        int c = 0;
         while( iter != end ) {
             size_t reg_result;
             hash_lookup_inst(iter,reg_result); //iter now means kv pair's key need to be flush
@@ -85,6 +87,7 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator) {
             iter = 1;
             hash_iterator_inst(iter);
         }
+        c = victim_vector.size();
 
         //////////////////////////  only available for extend and shrink case //////////////////////////
         //double row end
@@ -94,7 +97,7 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator) {
             shift --;
         }//half row end
         else if(indicator == 4){
-            hash_iterator_inst(indicator); // extend
+            hash_iterator_inst(indicator); // shrink
             hash_iterator_inst(rehash);
             shift ++;
         }
@@ -104,11 +107,15 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator) {
             hash_iterator_inst(rehash);
         }
         //////////////////////////////////////////////////////////////////////////////////////////////
-
+        int d = victim_vector.size();
         //insert all victims
+        int b = 0;
         for(auto kv : victim_vector) {
+            b++;
             hash_insert(kv[0], kv[1]);
         }
+
+
     }
 
 
@@ -117,22 +124,11 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator) {
 template<class T1,class T2>
 void HLB<T1,T2>::clear_hlb() {
     //set the ROW_END to 1
-    size_t begin = 0;
-    size_t end = -1;
     size_t reg;
+    reg = 7;
+    hash_iterator_inst(reg);
     reg = 6;
     hash_iterator_inst(reg);
-
-    //clear everything inside the table
-    hash_iterator_inst(begin);
-    hash_iterator_inst(end);
-    size_t iter = begin;
-    while(iter != end){
-        hash_erase_inst(iter, reg);
-        iter = 1;
-        hash_iterator_inst(iter);
-    }
-
 }
 
 
@@ -145,12 +141,13 @@ void HLB<T1,T2>::hash_insert(T1 k, T2 v, int rehash_count){
     if (k != reg_key){
         reg_v = 2; //to check if hash_table is extendable
         hash_iterator_inst(reg_v);
-        if(reg_v != 0) {
+        if(reg_v == 0) {
             //in this case hash_table is extendable
             //extend the hash_table to double, then insert the kv pair want to insert
             rehash_hlb(3);
             hash_insert(k,v,rehash_count);
         }else{
+            //hash_table not extendable
             if(rehash_count < REHASH_MAX && reg_v < LOAD_FACTOR) {
                 //in this case hash_table is not extendable && the occupied rate is not high, we need to change the hash function
                 //in such case, we still can rehash because rehash_count by now is still smaller then REHASH_MAX
@@ -159,13 +156,18 @@ void HLB<T1,T2>::hash_insert(T1 k, T2 v, int rehash_count){
                 hash_insert(k,v,rehash_count+1);
 
             }else {
+                //we are sure hlb is crowded, so we move victim to memory and insert the kv pair which we intend to insert at first to the hlb
                 //in this case, if we still do rehash we may fall into a dead loop, also it's not efficient. so we use mem_hash to do insert
+
+                //move victim from hlb to memory
                 size_t reg_value;
                 hash_lookup_inst(reg_key, reg_value);
                 T2 value = (T2)reg_value;
                 value_mem_hash<T2> tmp(value,0);
                 mem_hash[reg_key] = tmp;
+                hash_erase_inst(reg_key,reg_value);
 
+                //insert kv to hlb
                 size_t key = k;
                 size_t value_ = v;
                 hash_insert_inst(key, value_);
@@ -233,8 +235,15 @@ T1 HLB<T1,T2>::hash_begin() {
 }
 template<class T1,class T2>
 T1 HLB<T1,T2>::hash_end() {
-    auto result = mem_hash.end();
-    return result->first;
+    if(mem_hash.size() != 0){
+        auto result = mem_hash.end();
+        return result->first;
+    }else{
+        size_t result = -1;
+        hash_iterator_inst(result);
+        return result;
+    }
+
 }
 template<class T1,class T2>
 T1 HLB<T1,T2>::hash_next() {
