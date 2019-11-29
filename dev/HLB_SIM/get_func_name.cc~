@@ -2,6 +2,7 @@
 #include<iostream>
 using namespace std;
 int main(){
+    size_t a =3, b = 5;
     hash_lookup_inst(a,b);
     hash_insert_inst(a,b);
     hash_erase_inst(a,b);
