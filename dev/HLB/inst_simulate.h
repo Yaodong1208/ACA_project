@@ -229,27 +229,27 @@ void hash_iterator_inst(size_t &reg) {
         if(ROW_iter >= ROW_NUM){
             reg = ACCESS_NOT_ALLOWED;
             ROW_iter = ROW_NUM;
-        }
-        auto a = ROW_iter;
-        auto b = COL_iter;
-        //check whether the next position is NOVAL, if it is then continue to next position until find a position with value
-        while(hlb[ROW_iter][COL_iter][0] == NOVAL){
-            if(COL_iter == COL_NUM - 1){
-                ROW_iter ++;
-                COL_iter = 0;
-                if(ROW_iter >= ROW_NUM){
-                    break;
+        }else{
+            //check whether the next position is NOVAL, if it is then continue to next position until find a position with value
+            while(hlb[ROW_iter][COL_iter][0] == NOVAL){
+                if(COL_iter == COL_NUM - 1){
+                    ROW_iter ++;
+                    COL_iter = 0;
+                    if(ROW_iter >= ROW_NUM){
+                        break;
+                    }
+                }else{
+                    COL_iter ++;
                 }
+            }
+            if(ROW_iter >= ROW_NUM){
+                reg = ACCESS_NOT_ALLOWED;
+                ROW_iter = ROW_NUM - 1;
             }else{
-                COL_iter ++;
+                reg = hlb[ROW_iter][COL_iter][0];
             }
         }
-        if(ROW_iter >= ROW_NUM){
-            reg = ACCESS_NOT_ALLOWED;
-            ROW_iter = ROW_NUM - 1;
-        }else{
-            reg = hlb[ROW_iter][COL_iter][0];
-        }
+
     }
         //if input reg_val == 2 means we need to know if the hlb is full, if the return value of reg_val = false means extendable
         // otherwise the return value indicate occupied rate

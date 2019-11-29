@@ -193,7 +193,7 @@ void HLB<T1,T2>::hash_insert(T1 k, T2 v, int rehash_count){
 
     }
     //else means insert success
-    printf("count: %d \n", count());
+    printf("hlb count: %d, mem_hash count: %d, sum count: %d \n", count(), mem_hash.size(), count()+mem_hash.size());
 
 //    printf("row_end: %d \n", row_end());
 
@@ -274,17 +274,18 @@ T1 HLB<T1,T2>::hash_next() {
     hash_iterator_inst(reg);
     T1 key = reg;
     if (! mem_read){
-        return key;
-    }
+        if(reg != ACCESS_NOT_ALLOWED){
+            return key;
+        }else{
+            mem_read = true;
+            it = mem_hash.begin();
+            return it->first;
+        }
 
-    if (reg == END && ! mem_read){
-        mem_read = true;
-        it = mem_hash.begin();
+    }else{
+        it++;
         return it->first;
     }
 
-    if (mem_read){
-        it++;
-    }
 }
 #endif //HLB_HLB_API_H

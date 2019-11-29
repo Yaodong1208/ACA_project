@@ -28,17 +28,25 @@ void test(){
 
     //read out from myhlb
     int count = 0;
-    for(size_t it = myhlb.hash_begin(), end_hlb = myhlb.hash_end(); it != end_hlb; it = myhlb.hash_next()) {
+    size_t it = myhlb.hash_begin();
+    size_t end_hlb = myhlb.hash_end();
+    for(; it != end_hlb; it = myhlb.hash_next()) {
         size_t v = myhlb.hash_lookup(it);
         count ++;
         vector<size_t > tmp = {it,v};
         read_out_kv.insert(tmp);
         printf("lookup number: %d \n", count);
     }
+    size_t v = myhlb.hash_lookup(it);
+    count ++;
+    vector<size_t > tmp = {it,v};
+    read_out_kv.insert(tmp);
+    printf("lookup number: %d \n", count);
+
 
     //check if read_out_kv equals current_kv, if not, fail
     for(auto item : current_kv) {
-        if(read_out_kv.find(item) != read_out_kv.end()) {
+        if(read_out_kv.find(item) == read_out_kv.end()) {
             perror("test fail due to read_out not equals insert");
             break;
         }
