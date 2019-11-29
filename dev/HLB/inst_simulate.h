@@ -7,7 +7,7 @@
 #define ROW_NUM  1024
 #define COL_NUM 64
 #define SHRINK_RATE 10
-#define LOAD_FACTOR 80
+#define LOAD_FACTOR 60
 #define REHASH_MAX 3
 
 #include <iostream>
@@ -115,6 +115,8 @@ void hash_insert_inst(size_t &reg_key, size_t &reg_value) {
     else{
         lc ++;
     }
+
+
 }
 
 
@@ -261,7 +263,7 @@ void hash_iterator_inst(size_t &reg) {
                     }
                 }
             }
-
+//            printf("count: %d \n", count);
             reg = (count*100)/(ROW_NUM*COL_NUM);
         }else{
             reg = false;
@@ -304,5 +306,22 @@ void hash_iterator_inst(size_t &reg) {
         s = rand();
     }
 
+}
+
+//for debug
+int count(){
+    size_t count = 0;
+    for(size_t i = 0;i<ROW_NUM;i++){
+        for(size_t j=0;j<COL_NUM;j++){
+            if(hlb[i][j][0] != NOVAL){
+                count ++;
+            }
+        }
+    }
+    return count;
+}
+
+int row_end(){
+    return ROW_END;
 }
 #endif //HLB_INST_SIMULATE_H

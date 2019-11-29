@@ -22,26 +22,18 @@ void test(){
         tmp.push_back(rand()); //means key to insert
         tmp.push_back(rand()); //means value to insert
         myhlb.hash_insert(tmp[0],tmp[1]);
-        int update = 0;
-        for(auto kv: current_kv){
-            if(kv[0] == tmp[0]){
-                current_kv.erase(kv);
-                current_kv.insert(tmp);
-                update = 1;
-                break;
-            }
-        }
-        if(!update){
-            current_kv.insert(tmp);
-        }
-
+        current_kv.insert(tmp);
+        printf("size is %d \n",current_kv.size());
     }
 
     //read out from myhlb
+    int count = 0;
     for(size_t it = myhlb.hash_begin(), end_hlb = myhlb.hash_end(); it != end_hlb; it = myhlb.hash_next()) {
         size_t v = myhlb.hash_lookup(it);
+        count ++;
         vector<size_t > tmp = {it,v};
         read_out_kv.insert(tmp);
+        printf("lookup number: %d \n", count);
     }
 
     //check if read_out_kv equals current_kv, if not, fail
