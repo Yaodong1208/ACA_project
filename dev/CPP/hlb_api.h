@@ -2,8 +2,10 @@
 // Created by Anlan Yu on 11/23/19.
 //
 #include "../HLB/inst_simulate.h"
+#include "../LRUCACHE/LRUcache.h"
 #ifndef HLB_HLB_API_H
 #define HLB_HLB_API_H
+#define CACHE_SIZE
 
 
 #include <iostream>
@@ -30,6 +32,7 @@ template<class T1, class T2>
 class HLB{
 public:
 
+    LRUCache cache();
     void hash_insert(T1 key, T2 value, int rehash_count = 0);
     T2 hash_lookup(T1 key, int rehash_count = 0);
     void hash_erase(T1 key, int rehash_count = 0);
@@ -40,12 +43,24 @@ public:
     void clear_hlb();
     void rehash_hlb(size_t indicator, int rehash_count);
 
+    int mem_insert_count = 0;
+    int cache_insert_count = 0;
+    int mem_erase_count = 0;
+    int cache_erase_count = 0;
+    int mem_lookup_count = 0;
+    int cache_lookup_count = 0;
+
+    int hlb_insert_count = 0;
+    int hlb_erase_count = 0;
+    int hlb_lookup_count = 0;
+    int hlb_iterator_count = 0;
+
 private:
 
     vector<vector<size_t>> victim_vector;
     unordered_map<T1,value_mem_hash<T2>> mem_hash;
     bool mem_read;
-    typename unordered_map<T1,value_mem_hash<T2>>::iterator it;
+    typename unordered_map<T1,value_mem_hash<T2>>::iterator IT;
     int threshold = 5;
 };
 template<class T1,class T2>
@@ -59,6 +74,7 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator, int rehash_count) {
     size_t reg_key = 0;
     size_t rehash = 10;
     hash_iterator_inst(reg_key);
+    hlb_iterator_count++;
     if(reg_key == NOVAL) {
         //nothing in hlb for now
         //no need to do rehash
@@ -67,6 +83,7 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator, int rehash_count) {
         size_t begin = reg_key;
         size_t end = -1;
         hash_iterator_inst(end);
+        hlb_iterator_count++;
         size_t iter = begin;
         //flush
         //clear all victims and insert a new set of data
@@ -75,17 +92,22 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator, int rehash_count) {
         while( iter != end ) {
             size_t reg_result;
             hash_lookup_inst(iter,reg_result); //iter now means kv pair's key need to be flush
+            hlb_lookup_count++;
             std::vector<size_t> temp = {iter,reg_result};
             victim_vector.push_back(temp);
             hash_erase_inst(iter,reg_result);
+            hlb_erase_count++;
             iter = 1;
             hash_iterator_inst(iter);
+            hlb_iterator_count++;
         }
         size_t reg_result;
         hash_lookup_inst(iter,reg_result); //iter now means kv pair's key need to be flush
+        hlb_lookup_count++;
         std::vector<size_t> temp = {iter,reg_result};
         victim_vector.push_back(temp);
         hash_erase_inst(iter, reg_result);
+        hlb_erase_count++;
 
         int a = 0;
         a = victim_vector.size();
@@ -95,18 +117,23 @@ void HLB<T1,T2>::rehash_hlb(size_t indicator, int rehash_count) {
         //double row end
         if(indicator == 3){
             hash_iterator_inst(indicator);
+            hlb_iterator_count++;
             hash_iterator_inst(rehash);
+            hlb_iterator_count++;
             shift --;
         }//half row end
         else if(indicator == 4){
             hash_iterator_inst(indicator); // shrink
+            hlb_iterator_count++;
             hash_iterator_inst(rehash);
+            hlb_iterator_count++;
             shift ++;
         }
             ////////////////////////////////////////////////////////////////////////////////////////////////
             //////////////////////////   just rehash, not change size /////////////////////////////////////
         else{
             hash_iterator_inst(rehash);
+            hlb_iterator_count++;
         }
 
 
@@ -140,8 +167,10 @@ void HLB<T1,T2>::clear_hlb() {
     size_t reg;
     reg = 7;
     hash_iterator_inst(reg);
+    hlb_iterator_count++;
     reg = 6;
     hash_iterator_inst(reg);
+    hlb_iterator_count++;
 }
 
 
@@ -151,9 +180,11 @@ void HLB<T1,T2>::hash_insert(T1 k, T2 v, int rehash_count){
     size_t reg_key = k;
     size_t reg_v = v;
     hash_insert_inst(reg_key, reg_v);
+    hlb_insert_count++;
     if (k != reg_key){
         reg_v = 2; //to check if hash_table is extendable
         hash_iterator_inst(reg_v);
+        hlb_iterator_count++;
         if(reg_v == 0) {
             //in this case hash_table is extendable
             //extend the hash_table to double, then insert the kv pair want to insert
@@ -178,15 +209,19 @@ void HLB<T1,T2>::hash_insert(T1 k, T2 v, int rehash_count){
                 //move victim from hlb to memory
                 size_t reg_value;
                 hash_lookup_inst(reg_key, reg_value);
+                hlb_lookup_count;
                 T2 value = (T2)reg_value;
                 value_mem_hash<T2> tmp(value,0);
                 mem_hash[reg_key] = tmp;
+
                 hash_erase_inst(reg_key,reg_value);
+                hlb_erase_count++;
 
                 //insert kv to hlb
                 size_t key = k;
                 size_t value_ = v;
                 hash_insert_inst(key, value_);
+                hlb_insert_count++;
             }
 
         }
@@ -204,6 +239,7 @@ T2 HLB<T1,T2>::hash_lookup(T1 key, int rehash_count) {
     T2 value;
     size_t key_tmp = key;
     hash_lookup_inst(key_tmp, result);
+    hlb_lookup_count++;
     if(result == NOT_FOUND){
         //means the key is not in hlb, check memory
         if(mem_hash.find(key) != mem_hash.end()){
@@ -231,9 +267,11 @@ void HLB<T1,T2>::hash_erase(T1 key, int rehash_count){
     //if erase success return the current occupied rate
     //else we get FAIL
     hash_erase_inst(key_tmp, value);
+    hlb_erase_count++;
     if(value <= SHRINK_RATE) {
         size_t reg = 5;
         hash_iterator_inst(reg);
+        hlb_iterator_count++;
         if(reg){
             //means it is shrinkable
             rehash_hlb(4, rehash_count);
@@ -249,6 +287,7 @@ template<class T1,class T2>
 T1 HLB<T1,T2>::hash_begin() {
     size_t reg = 0;
     hash_iterator_inst(reg);
+    hlb_iterator_count++;
     T1 key = reg;
     return key;
 }
@@ -264,6 +303,7 @@ T1 HLB<T1,T2>::hash_end() {
     }else{
         size_t result = -1;
         hash_iterator_inst(result);
+        hlb_iterator_count++;
         return result;
     }
 
@@ -272,19 +312,20 @@ template<class T1,class T2>
 T1 HLB<T1,T2>::hash_next() {
     size_t reg = 1;
     hash_iterator_inst(reg);
+    hlb_iterator_count++;
     T1 key = reg;
     if (! mem_read){
         if(reg != ACCESS_NOT_ALLOWED){
             return key;
         }else{
             mem_read = true;
-            it = mem_hash.begin();
-            return it->first;
+            IT = mem_hash.begin();
+            return IT->first;
         }
 
     }else{
-        it++;
-        return it->first;
+        IT++;
+        return IT->first;
     }
 
 }

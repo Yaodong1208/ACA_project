@@ -7,7 +7,7 @@
 #include "../hlb_api.h"
 #include <set>
 using namespace std;
-void test(){
+void test1(){
     set<vector<size_t >> current_kv;//this contains kv we have inserted by now
     set<vector<size_t >> read_out_kv; // this contains kv we read_out from myhlb by now
     vector<size_t> kv_read;

@@ -4,5 +4,8 @@
 CMakeFiles/HLB.dir/main.cpp.o: ../hlb_api.h
 CMakeFiles/HLB.dir/main.cpp.o: ../main.cpp
 CMakeFiles/HLB.dir/main.cpp.o: ../tests/test001.h
+CMakeFiles/HLB.dir/main.cpp.o: ../tests/test002.h
+CMakeFiles/HLB.dir/main.cpp.o: ../tests/test003.h
 CMakeFiles/HLB.dir/main.cpp.o: /Users/anlanyu/ACA_project/dev/HLB/inst_simulate.h
+CMakeFiles/HLB.dir/main.cpp.o: /Users/anlanyu/ACA_project/dev/LRUCACHE/LRUcache.h
 

@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/anlanyu/ACA_project/dev/LRUCACHE/LRUcache.h
+list
+-
+unordered_map
+-
+
+/Users/anlanyu/ACA_project/dev/LRUCACHE/cmake-build-debug/main.cpp
+../LRUcache.h
+/Users/anlanyu/ACA_project/dev/LRUCACHE/LRUcache.h
+iostream
+-
+

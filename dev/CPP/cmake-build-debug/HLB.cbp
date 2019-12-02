@@ -86,10 +86,16 @@
 		<Unit filename="/Users/anlanyu/ACA_project/dev/CPP/main.cpp">
 			<Option target="HLB"/>
 		</Unit>
+		<Unit filename="/Users/anlanyu/ACA_project/dev/CPP/mem_hash.h">
+			<Option target="HLB"/>
+		</Unit>
 		<Unit filename="/Users/anlanyu/ACA_project/dev/CPP/tests/test001.h">
 			<Option target="HLB"/>
 		</Unit>
 		<Unit filename="/Users/anlanyu/ACA_project/dev/CPP/tests/test002.h">
+			<Option target="HLB"/>
+		</Unit>
+		<Unit filename="/Users/anlanyu/ACA_project/dev/CPP/tests/test003.h">
 			<Option target="HLB"/>
 		</Unit>
 		<Unit filename="/Users/anlanyu/ACA_project/dev/HLB/inst_simulate.h">
